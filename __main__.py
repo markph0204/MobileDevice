@@ -23,6 +23,6 @@
 
 
 if __name__ == u'__main__':
-	from __init__ import *
+    from __init__ import *
 
-	argparse_parse(globals())
+    argparse_parse(globals())

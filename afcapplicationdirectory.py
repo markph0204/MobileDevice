@@ -28,18 +28,18 @@ from afc import *
 
 
 class AFCApplicationDirectory(AFC):
-	def __init__(self, amdevice, identifier):
-		# first it acts like a plist service
-		plist = PlistService(
-			amdevice, 
-			[AMSVC_HOUSE_ARREST], 
-			kCFPropertyListXMLFormat_v1_0
-		)
-		plist._sendmsg({
-			u'Command': u'VendContainer',
-			u'Identifier': identifier
-		})
-		reply = plist._recvmsg()
-		if u'Status' not in reply or reply[u'Status'] != u'Complete':
-			raise RuntimeError(u'Error connecting to application', reply)
-		AFC.__init__(self, plist.s)
+    def __init__(self, amdevice, identifier):
+        # first it acts like a plist service
+        plist = PlistService(
+            amdevice, 
+            [AMSVC_HOUSE_ARREST], 
+            kCFPropertyListXMLFormat_v1_0
+        )
+        plist._sendmsg({
+            u'Command': u'VendContainer',
+            u'Identifier': identifier
+        })
+        reply = plist._recvmsg()
+        if u'Status' not in reply or reply[u'Status'] != u'Complete':
+            raise RuntimeError(u'Error connecting to application', reply)
+        AFC.__init__(self, plist.s)

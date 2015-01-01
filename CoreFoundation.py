@@ -28,11 +28,11 @@ import datetime
 
 
 if platform.system() == u'Darwin':
-	CoreFoundation = CDLL(u'/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation')
+    CoreFoundation = CDLL(u'/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation')
 elif platform.system() == u'Windows':
-	raise NotImplementedError(u'need to find and import the CoreFoundation dll')
+    raise NotImplementedError(u'need to find and import the CoreFoundation dll')
 else:
-	raise OSError(u'Platform not supported')
+    raise OSError(u'Platform not supported')
 
 
 # Supporting types
@@ -131,11 +131,11 @@ CFStringCreateWithCString.argtypes = [CFAllocatorRef, c_char_p, CFStringEncoding
 CFStringCreateWithBytes = CoreFoundation.CFStringCreateWithBytes
 CFStringCreateWithBytes.restype = CFStringRef
 CFStringCreateWithBytes.argtypes = [
-	CFAllocatorRef,
-	POINTER(c_uint8),
-	CFIndex,
-	CFStringEncoding,
-	c_bool
+    CFAllocatorRef,
+    POINTER(c_uint8),
+    CFIndex,
+    CFStringEncoding,
+    c_bool
 ]
 
 CFStringGetMaximumSizeForEncoding = CoreFoundation.CFStringGetMaximumSizeForEncoding
@@ -176,10 +176,10 @@ CFDataCreate.argtypes = [CFAllocatorRef, POINTER(c_uint8), CFIndex]
 CFDataCreateWithBytesNoCopy = CoreFoundation.CFDataCreateWithBytesNoCopy
 CFDataCreateWithBytesNoCopy.restype = CFDataRef
 CFDataCreateWithBytesNoCopy.argtypes = [
-	CFAllocatorRef, 
-	POINTER(c_uint8),
-	CFIndex,
-	CFAllocatorRef
+    CFAllocatorRef, 
+    POINTER(c_uint8),
+    CFIndex,
+    CFAllocatorRef
 ]
 
 CFDataGetBytePtr = CoreFoundation.CFDataGetBytePtr
@@ -201,12 +201,12 @@ CFDictionaryGetTypeID.argtypes = []
 CFDictionaryCreate = CoreFoundation.CFDictionaryCreate
 CFDictionaryCreate.restype = CFDictionaryRef
 CFDictionaryCreate.argtypes = [
-	CFAllocatorRef,
-	POINTER(c_void_p),
-	POINTER(c_void_p),
-	CFIndex,
-	POINTER(c_void_p),
-	POINTER(c_void_p)
+    CFAllocatorRef,
+    POINTER(c_void_p),
+    POINTER(c_void_p),
+    CFIndex,
+    POINTER(c_void_p),
+    POINTER(c_void_p)
 ]
 
 CFDictionaryGetCount = CoreFoundation.CFDictionaryGetCount
@@ -216,9 +216,9 @@ CFDictionaryGetCount.argtypes = [CFDictionaryRef]
 CFDictionaryGetKeysAndValues = CoreFoundation.CFDictionaryGetKeysAndValues
 CFDictionaryGetKeysAndValues.restype = None
 CFDictionaryGetKeysAndValues.argtypes = [
-	CFDictionaryRef, 
-	POINTER(c_void_p),
-	POINTER(c_void_p)
+    CFDictionaryRef, 
+    POINTER(c_void_p),
+    POINTER(c_void_p)
 ]
 
 CFDictionaryGetValue = CoreFoundation.CFDictionaryGetValue
@@ -264,21 +264,21 @@ kCFPropertyListMutableContainersAndLeaves = 2
 CFPropertyListCreateData = CoreFoundation.CFPropertyListCreateData
 CFPropertyListCreateData.restype = CFDataRef
 CFPropertyListCreateData.argtypes = [
-	CFAllocatorRef,
-	CFPropertyListRef,
-	CFPropertyListFormat,
-	CFOptionFlags,
-	POINTER(CFErrorRef)
+    CFAllocatorRef,
+    CFPropertyListRef,
+    CFPropertyListFormat,
+    CFOptionFlags,
+    POINTER(CFErrorRef)
 ]
 
 CFPropertyListCreateWithData = CoreFoundation.CFPropertyListCreateWithData
 CFPropertyListCreateWithData.restype = CFPropertyListRef
 CFPropertyListCreateWithData.argtypes = [
-	CFAllocatorRef,
-	CFDataRef,
-	CFOptionFlags,
-	POINTER(CFPropertyListFormat),
-	POINTER(CFErrorRef)
+    CFAllocatorRef,
+    CFDataRef,
+    CFOptionFlags,
+    POINTER(CFPropertyListFormat),
+    POINTER(CFErrorRef)
 ]
 
 # CFArray
@@ -320,9 +320,9 @@ CFRunLoopRun.argtypes = []
 CFRunLoopRunInMode = CoreFoundation.CFRunLoopRunInMode
 CFRunLoopRunInMode.restype = c_int32
 CFRunLoopRunInMode.argtypes = [
-	CFStringRef,
-	CFTimeInterval,
-	c_bool
+    CFStringRef,
+    CFTimeInterval,
+    c_bool
 ]
 
 CFRunLoopGetCurrent = CoreFoundation.CFRunLoopGetCurrent
@@ -357,29 +357,29 @@ CFUUIDGetTypeID.argtypes = []
 CFUUIDGetConstantUUIDWithBytes = CoreFoundation.CFUUIDGetConstantUUIDWithBytes
 CFUUIDGetConstantUUIDWithBytes.restype = CFUUIDRef
 CFUUIDGetConstantUUIDWithBytes.argtypes = [CFAllocatorRef, 
-	c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, 
-	c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8
+    c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, 
+    c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8
 ]
 
 class CFUUIDBytes(Structure):
-	_fields_ = [
-		(u'byte0', c_uint8),
-		(u'byte1', c_uint8),
-		(u'byte2', c_uint8),
-		(u'byte3', c_uint8),
-		(u'byte4', c_uint8),
-		(u'byte5', c_uint8),
-		(u'byte6', c_uint8),
-		(u'byte7', c_uint8),
-		(u'byte8', c_uint8),
-		(u'byte9', c_uint8),
-		(u'byte10', c_uint8),
-		(u'byte11', c_uint8),
-		(u'byte12', c_uint8),
-		(u'byte13', c_uint8),
-		(u'byte14', c_uint8),
-		(u'byte15', c_uint8)
-	]
+    _fields_ = [
+        (u'byte0', c_uint8),
+        (u'byte1', c_uint8),
+        (u'byte2', c_uint8),
+        (u'byte3', c_uint8),
+        (u'byte4', c_uint8),
+        (u'byte5', c_uint8),
+        (u'byte6', c_uint8),
+        (u'byte7', c_uint8),
+        (u'byte8', c_uint8),
+        (u'byte9', c_uint8),
+        (u'byte10', c_uint8),
+        (u'byte11', c_uint8),
+        (u'byte12', c_uint8),
+        (u'byte13', c_uint8),
+        (u'byte14', c_uint8),
+        (u'byte15', c_uint8)
+    ]
 
 CFUUIDGetUUIDBytes = CoreFoundation.CFUUIDGetUUIDBytes
 CFUUIDGetUUIDBytes.restype = CFUUIDBytes
@@ -409,172 +409,172 @@ CFSetGetValues.argtypes = [CFSetRef, POINTER(c_void_p)]
 
 # python/CF conversion functions
 def CFTypeFrom(value):
-	retval = None
-	if isinstance(value, str):
-		data = cast(c_char_p(value), POINTER(c_ubyte))
-		retval = CFDataCreate(None, data, len(value))
+    retval = None
+    if isinstance(value, str):
+        data = cast(c_char_p(value), POINTER(c_ubyte))
+        retval = CFDataCreate(None, data, len(value))
 
-	elif isinstance(value, unicode):
-		retval = CFStringCreateWithCString(None, value, kCFStringEncodingUTF8)
+    elif isinstance(value, unicode):
+        retval = CFStringCreateWithCString(None, value, kCFStringEncodingUTF8)
 
-	elif isinstance(value, bool):
-		if value:
-			retval = kCFBooleanTrue
-		else:
-			retval = kCFBooleanFalse
-		CFRetain(retval)
+    elif isinstance(value, bool):
+        if value:
+            retval = kCFBooleanTrue
+        else:
+            retval = kCFBooleanFalse
+        CFRetain(retval)
 
-	elif isinstance(value, int):
-		v = c_long(value)
-		retval = CFNumberCreate(None, kCFNumberLongType, byref(v))
+    elif isinstance(value, int):
+        v = c_long(value)
+        retval = CFNumberCreate(None, kCFNumberLongType, byref(v))
 
-	elif isinstance(value, float):
-		v = c_double(value)
-		retval = CFNumberCreate(None, kCFNumberDoubleType, byref(v))
+    elif isinstance(value, float):
+        v = c_double(value)
+        retval = CFNumberCreate(None, kCFNumberDoubleType, byref(v))
 
-	elif isinstance(value, dict):
-		l = len(value.keys())
-		keys = []
-		values = []
-		for k, v in value.iteritems():
-			keys.append(CFTypeFrom(k))
-			values.append(CFTypeFrom(v))
+    elif isinstance(value, dict):
+        l = len(value.keys())
+        keys = []
+        values = []
+        for k, v in value.iteritems():
+            keys.append(CFTypeFrom(k))
+            values.append(CFTypeFrom(v))
 
-		retval = CFDictionaryCreate(
-			None, 
-			(c_void_p * l)(*keys), 
-			(c_void_p * l)(*values), 
-			l,
-			byref(kCFTypeDictionaryKeyCallBacks),
-			byref(kCFTypeDictionaryValueCallBacks)
-		)
-	elif isinstance(value, list):
-		values = []
-		for v in value:
-			values.append(CFTypeFrom(v))
-		retval = CFArrayCreate(
-			None, 
-			(c_void_p * len(values))(*values),
-			len(value),
-			byref(kCFTypeArrayCallBacks)
-		)
-	elif isinstance(value, datetime.datetime):
-		retval = CFDateCreate(None, value.time()) # XXX sort out the origin
-	else:
-		raise RuntimeError(value, type(value))
+        retval = CFDictionaryCreate(
+            None, 
+            (c_void_p * l)(*keys), 
+            (c_void_p * l)(*values), 
+            l,
+            byref(kCFTypeDictionaryKeyCallBacks),
+            byref(kCFTypeDictionaryValueCallBacks)
+        )
+    elif isinstance(value, list):
+        values = []
+        for v in value:
+            values.append(CFTypeFrom(v))
+        retval = CFArrayCreate(
+            None, 
+            (c_void_p * len(values))(*values),
+            len(value),
+            byref(kCFTypeArrayCallBacks)
+        )
+    elif isinstance(value, datetime.datetime):
+        retval = CFDateCreate(None, value.time()) # XXX sort out the origin
+    else:
+        raise RuntimeError(value, type(value))
 
-	return retval
+    return retval
 
 
 def CFTypeTo(value):
-	retval = None
-	typeid = CFGetTypeID(value)
-	if typeid == CFStringGetTypeID():
-		l = CFStringGetLength(value)
-		bufsize = CFStringGetMaximumSizeForEncoding(l, kCFStringEncodingUTF8) + 1
-		buf = create_string_buffer(bufsize)
-		CFStringGetCString(value, buf, bufsize, kCFStringEncodingUTF8)
-		retval = buf.value
+    retval = None
+    typeid = CFGetTypeID(value)
+    if typeid == CFStringGetTypeID():
+        l = CFStringGetLength(value)
+        bufsize = CFStringGetMaximumSizeForEncoding(l, kCFStringEncodingUTF8) + 1
+        buf = create_string_buffer(bufsize)
+        CFStringGetCString(value, buf, bufsize, kCFStringEncodingUTF8)
+        retval = buf.value
 
-	elif typeid == CFDataGetTypeID():
-		retval = string_at(CFDataGetBytePtr(value), CFDataGetLength(value))
+    elif typeid == CFDataGetTypeID():
+        retval = string_at(CFDataGetBytePtr(value), CFDataGetLength(value))
 
-	elif typeid == CFNumberGetTypeID():
-		if CFNumberIsFloatType(value):
-			num = c_double()
-			if CFNumberGetValue(value, kCFNumberDoubleType, byref(num)):
-				retval = num.value
-		else:
-			num = c_long()
-			if CFNumberGetValue(value, kCFNumberLongType, byref(num)):
-				retval = num.value
+    elif typeid == CFNumberGetTypeID():
+        if CFNumberIsFloatType(value):
+            num = c_double()
+            if CFNumberGetValue(value, kCFNumberDoubleType, byref(num)):
+                retval = num.value
+        else:
+            num = c_long()
+            if CFNumberGetValue(value, kCFNumberLongType, byref(num)):
+                retval = num.value
 
-	elif typeid == CFDictionaryGetTypeID():
-		retval = {}
-		l = CFDictionaryGetCount(value)
-		keys = (c_void_p * l)()
-		values = (c_void_p * l)()
-		CFDictionaryGetKeysAndValues(value, keys, values)
-		for i in range(0, l):
-			key = CFTypeTo(keys[i])
-			val = CFTypeTo(values[i])
-			retval[key] = val
+    elif typeid == CFDictionaryGetTypeID():
+        retval = {}
+        l = CFDictionaryGetCount(value)
+        keys = (c_void_p * l)()
+        values = (c_void_p * l)()
+        CFDictionaryGetKeysAndValues(value, keys, values)
+        for i in range(0, l):
+            key = CFTypeTo(keys[i])
+            val = CFTypeTo(values[i])
+            retval[key] = val
 
-	elif typeid == CFBooleanGetTypeID():
-		retval = CFBooleanGetValue(value)
+    elif typeid == CFBooleanGetTypeID():
+        retval = CFBooleanGetValue(value)
 
-	elif typeid == CFArrayGetTypeID():
-		retval = []
-		for i in range(0, CFArrayGetCount(value)):
-			v = CFArrayGetValueAtIndex(value, i)
-			retval.append(CFTypeTo(v))
+    elif typeid == CFArrayGetTypeID():
+        retval = []
+        for i in range(0, CFArrayGetCount(value)):
+            v = CFArrayGetValueAtIndex(value, i)
+            retval.append(CFTypeTo(v))
 
-	elif typeid == CFDateGetTypeID():
-		retval = datetime.datetime.fromtimestamp(CFDateGetAbsoluteTime(value)) # sort out origin
+    elif typeid == CFDateGetTypeID():
+        retval = datetime.datetime.fromtimestamp(CFDateGetAbsoluteTime(value)) # sort out origin
 
-	elif typeid == CFSetGetTypeID():
-		retval = set()
-		l = CFSetGetCount(value)
-		values = (c_void_p * l)()
-		CFSetGetValues(value, values)
-		for i in range(0, l):
-			retval.add(CFTypeTo(values[i]))
-	else:
-		CFShow(value)
-		print(u'RuntimeError(',value, type(value), typeid)
-	return retval
+    elif typeid == CFSetGetTypeID():
+        retval = set()
+        l = CFSetGetCount(value)
+        values = (c_void_p * l)()
+        CFSetGetValues(value, values)
+        for i in range(0, l):
+            retval.add(CFTypeTo(values[i]))
+    else:
+        CFShow(value)
+        print(u'RuntimeError(',value, type(value), typeid)
+    return retval
 
 
 def dict_to_plist_encoding(d, format=kCFPropertyListBinaryFormat_v1_0):
-	retval = None
-	if not isinstance(d, dict):
-		raise TypeError(u'd must be a dict')
+    retval = None
+    if not isinstance(d, dict):
+        raise TypeError(u'd must be a dict')
 
-	# convert the dict into a CFDictionary
-	cfdict = CFTypeFrom(d)
-	if cfdict is not None:
-		err = CFErrorRef()
-		# convert CFDictionary to CFData
-		cfdata = CFPropertyListCreateData(
-			None, 
-			cfdict, 
-			format,
-			0,
-			byref(err)
-		)
+    # convert the dict into a CFDictionary
+    cfdict = CFTypeFrom(d)
+    if cfdict is not None:
+        err = CFErrorRef()
+        # convert CFDictionary to CFData
+        cfdata = CFPropertyListCreateData(
+            None, 
+            cfdict, 
+            format,
+            0,
+            byref(err)
+        )
 
-		CFRelease(cfdict)
-		if err.value != None:
-			CFRelease(err)
-		elif cfdata is not None:
-			# convert CFData to string
-			retval = CFTypeTo(cfdata)
-			CFRelease(cfdata) 
-	return retval
+        CFRelease(cfdict)
+        if err.value != None:
+            CFRelease(err)
+        elif cfdata is not None:
+            # convert CFData to string
+            retval = CFTypeTo(cfdata)
+            CFRelease(cfdata) 
+    return retval
 
 
 def dict_from_plist_encoding(s, format=kCFPropertyListBinaryFormat_v1_0):
-	retval = None
-	if not isinstance(s, str):
-		raise TypeError(u's must be a str')
+    retval = None
+    if not isinstance(s, str):
+        raise TypeError(u's must be a str')
 
-	# convert str to CFData
-	cfdata = CFTypeFrom(s)
-	if cfdata is not None:
-		# convert CFData to CFDictionary
-		cfdict = CFPropertyListCreateWithData(
-			None,
-			cfdata,
-			kCFPropertyListImmutable,
-			None,
-			None
-		)
-		CFRelease(cfdata)
-		if cfdict is not None:
-			# convert CFDictionary to dict
-			retval = CFTypeTo(cfdict)
-			CFRelease(cfdict)
-	return retval
+    # convert str to CFData
+    cfdata = CFTypeFrom(s)
+    if cfdata is not None:
+        # convert CFData to CFDictionary
+        cfdict = CFPropertyListCreateWithData(
+            None,
+            cfdata,
+            kCFPropertyListImmutable,
+            None,
+            None
+        )
+        CFRelease(cfdata)
+        if cfdict is not None:
+            # convert CFDictionary to dict
+            retval = CFTypeTo(cfdict)
+            CFRelease(cfdict)
+    return retval
 
 
 

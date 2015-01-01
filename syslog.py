@@ -29,42 +29,42 @@ import os
 
 
 class Syslog(object):
-	u'''Syslog relay class; starts the syslog service and reads all entries'''
+    u'''Syslog relay class; starts the syslog service and reads all entries'''
 
-	def __init__(self, amdevice):
-		self.s = amdevice.start_service(AMSVC_SYSLOG_RELAY)
-		if self.s is None:
-			raise RuntimeError(u'Unable to launch:', AMSVC_SYSLOG_RELAY)
+    def __init__(self, amdevice):
+        self.s = amdevice.start_service(AMSVC_SYSLOG_RELAY)
+        if self.s is None:
+            raise RuntimeError(u'Unable to launch:', AMSVC_SYSLOG_RELAY)
 
-	def disconnect(self):
-		os.close(self.s)
+    def disconnect(self):
+        os.close(self.s)
 
-	def read(self, length=1024):
-		u'''reads at most length bytes from the syslog; blocking if no more data
-		is avaliable
+    def read(self, length=1024):
+        u'''reads at most length bytes from the syslog; blocking if no more data
+        is avaliable
 
-		Arguments:
-		length -- the max bytes to read (default 1024)
-		'''
-		return os.read(self.s, length)
+        Arguments:
+        length -- the max bytes to read (default 1024)
+        '''
+        return os.read(self.s, length)
 
 
 def register_argparse_syslog(cmdargs):
-	import argparse
-	import sys
+    import argparse
+    import sys
 
-	def cmd_syslog(args, dev):
-		sl = Syslog(dev)
-		while True:
-			msg = sl.read()
-			if msg is None:
-				break
-			sys.stdout.write(msg)
-		sl.disconnect()
+    def cmd_syslog(args, dev):
+        sl = Syslog(dev)
+        while True:
+            msg = sl.read()
+            if msg is None:
+                break
+            sys.stdout.write(msg)
+        sl.disconnect()
 
-	# syslog command
-	syslogcmd = cmdargs.add_parser(
-		u'syslog', 
-		help=u'displays syslog info from the device'
-	)
-	syslogcmd.set_defaults(func=cmd_syslog)
+    # syslog command
+    syslogcmd = cmdargs.add_parser(
+        u'syslog', 
+        help=u'displays syslog info from the device'
+    )
+    syslogcmd.set_defaults(func=cmd_syslog)

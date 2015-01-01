@@ -27,9 +27,9 @@ from afc import *
 
 
 class AFCRoot(AFC):
-	def __init__(self, amdevice):
-		s = amdevice.start_service(u'com.apple.afc2')
-		if s is None:
-			raise RuntimeError(u'Unable to launch:', u'com.apple.afc2')
-		AFC.__init__(self, s)
+    def __init__(self, amdevice):
+        s = amdevice.start_service(u'com.apple.afc2')
+        if s is None:
+            raise RuntimeError(u'Unable to launch:', u'com.apple.afc2')
+        AFC.__init__(self, s)
 
