@@ -24,6 +24,9 @@
 
 from amdevice import *
 from plistservice import *
+from afc import *
+import afcmediadirectory
+import pprint
 
 
 class InstallationProxy(PlistService):
@@ -64,7 +67,8 @@ class InstallationProxy(PlistService):
 
     def _install_or_upgrade(self, install, path, options=None, progress=None):
         def callback(cfdict, arg):
-            pass
+            info = CFTypeTo(cfdict)
+            pprint.pprint(info)
 
         cfpath = CFTypeFrom(path)
         if options is not None:
@@ -73,9 +77,10 @@ class InstallationProxy(PlistService):
             cfoptions = CFTypeFrom({
                 u'PackageType': u'Developer'
             })
-        cb = AFCProgressCallback(callback)
+        cb = AMDeviceProgressCallback(callback)
         if progress is not None:
-            cb = AFCProgressCallback(progress)
+            cb = AMDeviceProgressCallback(progress)
+
         if install:
             err = AMDeviceInstallApplication(self.s, cfpath, cfoptions, cb, None)
         else:
@@ -84,6 +89,51 @@ class InstallationProxy(PlistService):
         CFRelease(cfoptions)
         if err != MDERR_OK:
             raise RuntimeError(u'Unable to install application', err)
+        
+    def uninstall_application(self, appid, options=None):
+        u'''Uninstall the application'''
+        def callback(cfdict, arg):
+            info = CFTypeTo(cfdict)
+            pprint.pprint(info)
+
+        cfappid = CFTypeFrom(appid)
+        cb = AMDeviceProgressCallback(callback)
+        AMDeviceUninstallApplication(self.s, cfappid, options, cb, None)
+        
+    def archive_application(self, appid, options=None):
+        u'''Archive the application'''
+        def callback(cfdict, arg):
+            info = CFTypeTo(cfdict)
+            pprint.pprint(info)
+
+        cfappid = CFTypeFrom(appid)
+        cb = AMDeviceProgressCallback(callback)
+        if options is not None:
+            cfoptions = CFTypeFrom(options)
+        else:
+            cfoptions = CFTypeFrom({
+                u'SkipUninstall': True,
+                u'ArchiveType': u'ApplicationOnly' # "DocumentsOnly", "ApplicationOnly", "All"
+            })
+        AMDeviceArchiveApplication(self.s, cfappid, cfoptions, cb, None)
+
+        src = u'/ApplicationArchives/' + appid + u'.zip'
+        dst = appid + u'.zip'
+        afc = afcmediadirectory.AFCMediaDirectory(self.dev)
+        s = afc.open(src, u'r')
+        d = open(dst, u'w+')
+
+        #info = s.lstat(src)
+        #size = int(info.st_size)
+        #while (size > 0):
+        #   d.write(s.read(1024*32))
+        #   size -= 1024 * 32
+        d.write(s.readall())
+        d.close()
+        s.close()
+        afc.disconnect()
+
+        AMDeviceRemoveApplicationArchive(self.s, cfappid, None, cb, None)
 
     # TODO: archive, restore, etc
 
@@ -93,9 +143,20 @@ def register_argparse_install(cmdargs):
     import argparse
     import sys
     import pprint
+    import afcmediadirectory
 
     # AMDSetLogLevel(0xff)
     # AMDSetLogLevel(0x0)
+
+    def cmd_install(args, dev):
+        path = args.path.decode(u'utf-8')
+        print path
+        afc = afcmediadirectory.AFCMediaDirectory(dev)
+        pxy = InstallationProxy(dev)
+        pprint.pprint(afc.transfer_application(path))
+        pprint.pprint(pxy.install_application(path))
+        pxy.disconnect()
+        afc.disconnect()
 
     def cmd_browse(args, dev):
         pxy = InstallationProxy(dev)
@@ -107,8 +168,8 @@ def register_argparse_install(cmdargs):
         apps = {}
         maxappid = 0
         for app in pxy.lookup_applications():
-            appid = app[u'CFBundleIdentifier']
-            apps[appid] = app[u'Path']
+            appid = app[u'CFBundleIdentifier'].decode(u'utf-8')
+            apps[appid] = app[u'Path'].decode(u'utf-8')
             if len(appid) > maxappid:
                 maxappid = len(appid)
         pxy.disconnect()
@@ -116,11 +177,34 @@ def register_argparse_install(cmdargs):
             apppath = apps[appid]
             print(appid.ljust(maxappid) + u' ' + apppath)
 
+    def cmd_uninstall(args, dev):
+        appid = args.appid.decode(u'utf-8')
+        pxy = InstallationProxy(dev)
+        pprint.pprint(pxy.uninstall_application(appid))
+        pxy.disconnect()
+
+    def cmd_archive(args, dev):
+        appid = args.appid.decode(u'utf-8')
+        pxy = InstallationProxy(dev)
+        pprint.pprint(pxy.archive_application(appid))
+        pxy.disconnect()
+
     installparser = cmdargs.add_parser(
         u'install', 
         help=u'installation proxy commands'
     )
     installcmd = installparser.add_subparsers()
+
+    # install command
+    instcmd = installcmd.add_parser(
+        u'install',
+        help=u'install applications on the device'
+    )
+    instcmd.add_argument(
+        u'path',
+        help=u'applications path'
+    )
+    instcmd.set_defaults(func=cmd_install)
 
     # browse command
     browsecmd = installcmd.add_parser(
@@ -135,4 +219,26 @@ def register_argparse_install(cmdargs):
         help=u'lists all application ids'
     )
     listappscmd.set_defaults(func=cmd_listapps)
+
+    # uninstall command
+    uninstallcmd = installcmd.add_parser(
+        u'uninstall',
+        help=u'uninstall the application'
+    )
+    uninstallcmd.add_argument(
+        u'appid',
+        help=u'the application id'
+    )
+    uninstallcmd.set_defaults(func=cmd_uninstall)
+
+    # archive command
+    archivecmd = installcmd.add_parser(
+        u'archive',
+        help=u'archive the application'
+    )
+    archivecmd.add_argument(
+        u'appid',
+        help=u'the application id'
+    )
+    archivecmd.set_defaults(func=cmd_archive)
 
