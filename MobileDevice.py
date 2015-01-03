@@ -204,6 +204,16 @@ AMDeviceActivate.restype = mach_error_t
 AMDeviceActivate.argtypes = [AMDeviceRef, CFTypeRef]
 
 # XXX _AMDeviceArchiveApplication
+AMDeviceArchiveApplication = MobileDevice.AMDeviceArchiveApplication
+AMDeviceArchiveApplication.restype = mach_error_t
+AMDeviceArchiveApplication.argtypes = [
+	c_uint32, 
+	CFStringRef, 
+	CFDictionaryRef, 
+	AMDeviceProgressCallback, 
+	c_void_p
+]
+
 # XXX _AMDeviceCheckCapabilitiesMatch
 
 AMDeviceConnect = MobileDevice.AMDeviceConnect
@@ -215,6 +225,9 @@ AMDeviceConnect.argtypes = [AMDeviceRef]
 # XXX _AMDeviceCopyAuthInstallPreflightOptions
 
 # AMDeviceCopyDeviceIdentifier - returns same value as AMDeviceGetName
+AMDeviceCopyDeviceIdentifier = MobileDevice.AMDeviceCopyDeviceIdentifier
+AMDeviceCopyDeviceIdentifier.restype = c_long
+AMDeviceCopyDeviceIdentifier.argtypes = [AMDeviceRef]
 
 AMDeviceCopyDeviceLocation = MobileDevice.AMDeviceCopyDeviceLocation
 AMDeviceCopyDeviceLocation.restype = c_long
@@ -293,6 +306,13 @@ AMDeviceIsPaired.argtypes = [AMDeviceRef]
 
 # AMDeviceLookupApplicationArchives - legacy version of AMDeviceLookupApplications
 # AMDeviceLookupApplications - sends Browse to installation_proxy; we do directly
+AMDeviceLookupApplications = MobileDevice.AMDeviceLookupApplications
+AMDeviceLookupApplications.restype = mach_error_t
+AMDeviceLookupApplications.argtypes = [
+	AMDeviceRef, 
+	CFDictionaryRef, 
+	POINTER(CFDictionaryRef)
+]
 
 AMDeviceMountImage = MobileDevice.AMDeviceMountImage
 AMDeviceMountImage.restype = mach_error_t
@@ -333,6 +353,15 @@ AMDeviceRelease.restype = None
 AMDeviceRelease.argtypes = [AMDeviceRef]
 
 # AMDeviceRemoveApplicationArchive - I'm guessing its the legacy version of AMDeviceSecureUninstallApplication
+AMDeviceRemoveApplicationArchive = MobileDevice.AMDeviceRemoveApplicationArchive
+AMDeviceRemoveApplicationArchive.restype = mach_error_t
+AMDeviceRemoveApplicationArchive.argtypes = [
+	c_uint32, 
+	CFStringRef, 
+	CFDictionaryRef, 
+	AMDeviceProgressCallback, 
+	c_void_p
+]
 
 # XXX AMDeviceRemoveProvisioningProfile
 
@@ -406,6 +435,16 @@ AMDeviceUSBProductID.restype = c_long
 AMDeviceUSBProductID.argtypes = [AMDeviceRef]
 
 # XXX AMDeviceUninstallApplication
+AMDeviceUninstallApplication = MobileDevice.AMDeviceUninstallApplication
+AMDeviceUninstallApplication.restype = mach_error_t
+AMDeviceUninstallApplication.argtypes = [
+	c_uint32, 
+	CFStringRef, 
+	CFDictionaryRef, 
+	AMDeviceProgressCallback, 
+	c_void_p
+]
+
 # XXX AMDeviceUninstallPackage
 
 AMDeviceUnpair = MobileDevice.AMDeviceUnpair
@@ -443,6 +482,13 @@ AMDeviceValidatePairing.argtypes = [AMDeviceRef]
 #   POINTER(c_int32)
 #]
 
+AMDServiceConnectionSend = MobileDevice.AMDServiceConnectionSend
+AMDServiceConnectionSend.restype = mach_error_t
+AMDServiceConnectionSend.argtypes = [
+	c_uint32,
+	c_char_p,
+	c_uint32
+]
 
 #AMD* methods
 AMDSetLogLevel = MobileDevice.AMDSetLogLevel
