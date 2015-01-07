@@ -90,14 +90,18 @@ class InstallationProxy(PlistService):
         if err != MDERR_OK:
             raise RuntimeError(u'Unable to install application', err)
         
-    def uninstall_application(self, appid, options=None):
+    def uninstall_application(self, appid, options=None, progress=None):
         u'''Uninstall the application'''
         def callback(cfdict, arg):
             info = CFTypeTo(cfdict)
             pprint.pprint(info)
 
         cfappid = CFTypeFrom(appid)
+
         cb = AMDeviceProgressCallback(callback)
+        if progress is not None:
+            cb = AMDeviceProgressCallback(progress)
+
         AMDeviceUninstallApplication(self.s, cfappid, options, cb, None)
         
     def archive_application(self, appid, options=None):
