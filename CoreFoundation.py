@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -176,7 +176,7 @@ CFDataCreate.argtypes = [CFAllocatorRef, POINTER(c_uint8), CFIndex]
 CFDataCreateWithBytesNoCopy = CoreFoundation.CFDataCreateWithBytesNoCopy
 CFDataCreateWithBytesNoCopy.restype = CFDataRef
 CFDataCreateWithBytesNoCopy.argtypes = [
-    CFAllocatorRef, 
+    CFAllocatorRef,
     POINTER(c_uint8),
     CFIndex,
     CFAllocatorRef
@@ -216,7 +216,7 @@ CFDictionaryGetCount.argtypes = [CFDictionaryRef]
 CFDictionaryGetKeysAndValues = CoreFoundation.CFDictionaryGetKeysAndValues
 CFDictionaryGetKeysAndValues.restype = None
 CFDictionaryGetKeysAndValues.argtypes = [
-    CFDictionaryRef, 
+    CFDictionaryRef,
     POINTER(c_void_p),
     POINTER(c_void_p)
 ]
@@ -356,8 +356,8 @@ CFUUIDGetTypeID.argtypes = []
 
 CFUUIDGetConstantUUIDWithBytes = CoreFoundation.CFUUIDGetConstantUUIDWithBytes
 CFUUIDGetConstantUUIDWithBytes.restype = CFUUIDRef
-CFUUIDGetConstantUUIDWithBytes.argtypes = [CFAllocatorRef, 
-    c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, 
+CFUUIDGetConstantUUIDWithBytes.argtypes = [CFAllocatorRef,
+    c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8,
     c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8, c_uint8
 ]
 
@@ -441,9 +441,9 @@ def CFTypeFrom(value):
             values.append(CFTypeFrom(v))
 
         retval = CFDictionaryCreate(
-            None, 
-            (c_void_p * l)(*keys), 
-            (c_void_p * l)(*values), 
+            None,
+            (c_void_p * l)(*keys),
+            (c_void_p * l)(*values),
             l,
             byref(kCFTypeDictionaryKeyCallBacks),
             byref(kCFTypeDictionaryValueCallBacks)
@@ -453,7 +453,7 @@ def CFTypeFrom(value):
         for v in value:
             values.append(CFTypeFrom(v))
         retval = CFArrayCreate(
-            None, 
+            None,
             (c_void_p * len(values))(*values),
             len(value),
             byref(kCFTypeArrayCallBacks)
@@ -536,8 +536,8 @@ def dict_to_plist_encoding(d, format=kCFPropertyListBinaryFormat_v1_0):
         err = CFErrorRef()
         # convert CFDictionary to CFData
         cfdata = CFPropertyListCreateData(
-            None, 
-            cfdict, 
+            None,
+            cfdict,
             format,
             0,
             byref(err)
@@ -549,7 +549,7 @@ def dict_to_plist_encoding(d, format=kCFPropertyListBinaryFormat_v1_0):
         elif cfdata is not None:
             # convert CFData to string
             retval = CFTypeTo(cfdata)
-            CFRelease(cfdata) 
+            CFRelease(cfdata)
     return retval
 
 

@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -42,14 +42,14 @@ class WebKitInspector(WIRService):
             # they don't check the type/convert WIRConnectionIdentifierKey
             # Thus if we send a string, it converts to a CFData and Safari goes
             # pop when it tries to call compare on the CFData
-            retval = retval.decode(u'utf-8') 
+            retval = retval.decode(u'utf-8')
         return retval
 
     # register a connection_uuid
     def reportIdentifier(self, connection_uuid):
         self._sendmsg(
             u'_rpc_reportIdentifier:',
-            { 
+            {
                 u'WIRConnectionIdentifierKey': connection_uuid,
             }
         )
@@ -99,7 +99,7 @@ class WebKitInspector(WIRService):
     def forwardSocketSetup(self, connection_uuid, appid, pageid, sender_uuid):
         self._sendmsg(
             u'_rpc_forwardSocketSetup:',
-            { 
+            {
                 u'WIRConnectionIdentifierKey':  connection_uuid,
                 u'WIRApplicationIdentifierKey': appid,
                 u'WIRPageIdentifierKey': pageid,
@@ -112,7 +112,7 @@ class WebKitInspector(WIRService):
     def forwardSocketData(self, connection_uuid, appid, pageid, sender_uuid, jsonmsg):
         self._sendmsg(
             u'_rpc_forwardSocketData:',
-            { 
+            {
                 u'WIRConnectionIdentifierKey': connection_uuid,
                 u'WIRApplicationIdentifierKey': appid,
                 u'WIRPageIdentifierKey': pageid,
@@ -125,7 +125,7 @@ class WebKitInspector(WIRService):
     def forwardDidClose(self, connection_uuid, appid, pageid, sender_uuid):
         self.sendmsg(
             u'_rpc_forwardDidClose:',
-            { 
+            {
                 u'WIRConnectionIdentifierKey': connection_uuid,
                 u'WIRApplicationIdentifierKey': appid,
                 u'WIRPageIdentifierKey': pageid,
@@ -170,7 +170,7 @@ def register_argparse_webinspector(cmdargs):
         f = open(args.path, u'rb')
         content = f.read()
         f.close()
-        
+
         # wakeup device
         # switch to safari?
         wi = WebKitInspector(dev)
@@ -186,7 +186,7 @@ def register_argparse_webinspector(cmdargs):
         wi.disconnect()
 
     webparser = cmdargs.add_parser(
-        u'web', 
+        u'web',
         help=u'webinspector actions; requires settings->safari->advanced->web-inspector be enabled'
     )
     webcmd = webparser.add_subparsers()

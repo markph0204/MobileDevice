@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,7 +35,7 @@ class AFCMediaDirectory(AFC):
         AFC.__init__(self, s)
 
     def transfer_application(self, path, progress=None):
-        u'''Transfers an application bundle to the device; into the 
+        u'''Transfers an application bundle to the device; into the
         /PublicStaging directory
 
         Arguments:
@@ -47,7 +47,7 @@ class AFCMediaDirectory(AFC):
         Raises RuntimeError on error
         '''
         # Technically you could use this on any AFC connection but it only makes
-        # sense to use it on the MediaDirectory - as it hard coded moves stuff 
+        # sense to use it on the MediaDirectory - as it hard coded moves stuff
         # to /PublicStaging.
         def callback(cfdict, arg):
             info = CFTypeTo(cfdict)
@@ -115,12 +115,12 @@ def register_argparse_afc(cmdargs):
             for i in range(len(row)):
                 if len(row[i]) > colmax[i]:
                     colmax[i] = len(row[i])
-    
+
         for row in rows:
             print(
                 row[0].ljust(colmax[0]) + u'  ' +
-                row[1].rjust(colmax[1]) + u'  ' + 
-                row[2].ljust(colmax[2]) + u'  ' + 
+                row[1].rjust(colmax[1]) + u'  ' +
+                row[2].ljust(colmax[2]) + u'  ' +
                 row[3])
 
         if recurse:
@@ -139,7 +139,7 @@ def register_argparse_afc(cmdargs):
             retval = afccrashlogdirectory.AFCCrashLogDirectory(dev)
         elif args.app is not None:
             retval = afcapplicationdirectory.AFCApplicationDirectory(
-                dev, 
+                dev,
                 args.app.decode(u'utf-8')
             )
         else:
@@ -224,11 +224,11 @@ def register_argparse_afc(cmdargs):
 
         for f in files:
             preview_file(afc, f)
-        afc.disconnect()        
+        afc.disconnect()
 
     # afc command
     afcparser = cmdargs.add_parser(
-        u'afc', 
+        u'afc',
         help=u'commands to manipulate files via afc'
     )
     afcgroup = afcparser.add_mutually_exclusive_group()

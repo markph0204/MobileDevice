@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -124,7 +124,7 @@ AMDeviceNotificationCallbackInfoRef = POINTER(AMDeviceNotificationCallbackInfo)
 
 
 AMDeviceNotificationCallback = CFUNCTYPE(
-    None, 
+    None,
     AMDeviceNotificationCallbackInfoRef,
     c_int
 )
@@ -172,7 +172,7 @@ AMRestoreDeviceRef = POINTER(AMRestoreDevice)
 
 
 AMRestoreDeviceNotificationCallback = CFUNCTYPE(
-    None, 
+    None,
     AMRecoveryDeviceRef
 )
 
@@ -207,11 +207,11 @@ AMDeviceActivate.argtypes = [AMDeviceRef, CFTypeRef]
 AMDeviceArchiveApplication = MobileDevice.AMDeviceArchiveApplication
 AMDeviceArchiveApplication.restype = mach_error_t
 AMDeviceArchiveApplication.argtypes = [
-	c_uint32, 
-	CFStringRef, 
-	CFDictionaryRef, 
-	AMDeviceProgressCallback, 
-	c_void_p
+    c_uint32,
+    CFStringRef,
+    CFDictionaryRef,
+    AMDeviceProgressCallback,
+    c_void_p
 ]
 
 # XXX _AMDeviceCheckCapabilitiesMatch
@@ -287,10 +287,10 @@ AMDeviceGetWirelessBuddyFlags.argtypes = [AMDeviceRef, POINTER(c_long)]
 AMDeviceInstallApplication = MobileDevice.AMDeviceInstallApplication
 AMDeviceInstallApplication.restype = mach_error_t
 AMDeviceInstallApplication.argtypes = [
-    c_uint32, 
-    CFStringRef, 
-    CFDictionaryRef, 
-    AMDeviceProgressCallback, 
+    c_uint32,
+    CFStringRef,
+    CFDictionaryRef,
+    AMDeviceProgressCallback,
     c_void_p
 ]
 
@@ -309,27 +309,27 @@ AMDeviceIsPaired.argtypes = [AMDeviceRef]
 AMDeviceLookupApplications = MobileDevice.AMDeviceLookupApplications
 AMDeviceLookupApplications.restype = mach_error_t
 AMDeviceLookupApplications.argtypes = [
-	AMDeviceRef, 
-	CFDictionaryRef, 
-	POINTER(CFDictionaryRef)
+    AMDeviceRef,
+    CFDictionaryRef,
+    POINTER(CFDictionaryRef)
 ]
 
 AMDeviceMountImage = MobileDevice.AMDeviceMountImage
 AMDeviceMountImage.restype = mach_error_t
 AMDeviceMountImage.argtypes = [
-    AMDeviceRef, 
-    CFStringRef, 
-    CFDictionaryRef, 
-    AMDeviceProgressCallback, 
+    AMDeviceRef,
+    CFStringRef,
+    CFDictionaryRef,
+    AMDeviceProgressCallback,
     c_void_p
 ]
 
 AMDeviceNotificationSubscribe = MobileDevice.AMDeviceNotificationSubscribe
 AMDeviceNotificationSubscribe.restype = mach_error_t
 AMDeviceNotificationSubscribe.argtypes = [
-    AMDeviceNotificationCallback, 
-    c_uint32, 
-    c_uint32, 
+    AMDeviceNotificationCallback,
+    c_uint32,
+    c_uint32,
     c_uint32,
     POINTER(AMDeviceNotificationRef)
 ]
@@ -356,11 +356,11 @@ AMDeviceRelease.argtypes = [AMDeviceRef]
 AMDeviceRemoveApplicationArchive = MobileDevice.AMDeviceRemoveApplicationArchive
 AMDeviceRemoveApplicationArchive.restype = mach_error_t
 AMDeviceRemoveApplicationArchive.argtypes = [
-	c_uint32, 
-	CFStringRef, 
-	CFDictionaryRef, 
-	AMDeviceProgressCallback, 
-	c_void_p
+    c_uint32,
+    CFStringRef,
+    CFDictionaryRef,
+    AMDeviceProgressCallback,
+    c_void_p
 ]
 
 # XXX AMDeviceRemoveProvisioningProfile
@@ -382,7 +382,7 @@ AMDeviceRemoveValue.argtypes = [AMDeviceRef, CFStringRef, CFStringRef]
 # AMDeviceSecureUninstallApplication - we will use the non-secure wrapper
 # AMDeviceSecureUpgradeApplication - we will use the non-secure wrapper
 # AMDeviceSetUserInfo - not needed; sets the user info member of AMDeviceRef
- 
+
 AMDeviceSetValue = MobileDevice.AMDeviceSetValue
 AMDeviceSetValue.restype = mach_error_t
 AMDeviceSetValue.argtypes = [AMDeviceRef, CFStringRef, CFStringRef, CFTypeRef]
@@ -398,8 +398,8 @@ AMDeviceSetWirelessBuddyFlags.argtypes = [AMDeviceRef, c_long]
 AMDeviceStartServiceWithOptions = MobileDevice.AMDeviceStartServiceWithOptions
 AMDeviceStartServiceWithOptions.restype = mach_error_t
 AMDeviceStartServiceWithOptions.argtypes = [
-    AMDeviceRef, 
-    CFStringRef, 
+    AMDeviceRef,
+    CFStringRef,
     CFDictionaryRef,
     POINTER(c_int32)
 ]
@@ -415,10 +415,10 @@ AMDeviceStopSession.argtypes = [AMDeviceRef]
 AMDeviceTransferApplication = MobileDevice.AMDeviceTransferApplication
 AMDeviceTransferApplication.restype = mach_error_t
 AMDeviceTransferApplication.argtypes = [
-    c_int32, 
-    CFStringRef, 
-    c_void_p, 
-    AMDeviceProgressCallback, 
+    c_int32,
+    CFStringRef,
+    c_void_p,
+    AMDeviceProgressCallback,
     c_void_p
 ]
 
@@ -438,11 +438,11 @@ AMDeviceUSBProductID.argtypes = [AMDeviceRef]
 AMDeviceUninstallApplication = MobileDevice.AMDeviceUninstallApplication
 AMDeviceUninstallApplication.restype = mach_error_t
 AMDeviceUninstallApplication.argtypes = [
-	c_uint32, 
-	CFStringRef, 
-	CFDictionaryRef, 
-	AMDeviceProgressCallback, 
-	c_void_p
+    c_uint32,
+    CFStringRef,
+    CFDictionaryRef,
+    AMDeviceProgressCallback,
+    c_void_p
 ]
 
 # XXX AMDeviceUninstallPackage
@@ -454,10 +454,10 @@ AMDeviceUnpair.argtypes = [AMDeviceRef]
 AMDeviceUpgradeApplication = MobileDevice.AMDeviceUpgradeApplication
 AMDeviceUpgradeApplication.restype = mach_error_t
 AMDeviceUpgradeApplication.argtypes = [
-    c_uint32, 
-    CFStringRef, 
-    CFDictionaryRef, 
-    AMDeviceProgressCallback, 
+    c_uint32,
+    CFStringRef,
+    CFDictionaryRef,
+    AMDeviceProgressCallback,
     c_void_p
 ]
 
@@ -477,17 +477,17 @@ AMDeviceValidatePairing.argtypes = [AMDeviceRef]
 #AMDeviceConnectByAddressAndPort = MobileDevice._AMDeviceConnectByAddressAndPort
 #AMDeviceConnectByAddressAndPort.restype = mach_error_t
 #AMDeviceConnectByAddressAndPort.argtypes = [
-#   AMDeviceRef, 
-#   c_ushort, 
+#   AMDeviceRef,
+#   c_ushort,
 #   POINTER(c_int32)
 #]
 
 AMDServiceConnectionSend = MobileDevice.AMDServiceConnectionSend
 AMDServiceConnectionSend.restype = mach_error_t
 AMDServiceConnectionSend.argtypes = [
-	c_uint32,
-	c_char_p,
-	c_uint32
+    c_uint32,
+    c_char_p,
+    c_uint32
 ]
 
 #AMD* methods
@@ -500,8 +500,8 @@ AMDSetLogLevel.argtypes = [c_int]
 USBMuxConnectByPort = MobileDevice.USBMuxConnectByPort
 USBMuxConnectByPort.restype = mach_error_t
 USBMuxConnectByPort.argtypes = [
-    c_int, 
-    c_int, 
+    c_int,
+    c_int,
     POINTER(c_int)
 ]
 
@@ -521,7 +521,7 @@ AFCConnectionOpen.argtypes = [c_int32, c_uint32, POINTER(AFCConnectionRef)]
 #AMRecoveryModeCopyEnvironmentVariable = MobileDevice.AMRecoveryModeCopyEnvironmentVariable
 #AMRecoveryModeCopyEnvironmentVariable.restype = CFStringRef
 #AMRecoveryModeCopyEnvironmentVariable.argtypes = [
-#   AMRecoveryDeviceRef, 
+#   AMRecoveryDeviceRef,
 #   CFStringRef
 #]
 
@@ -537,8 +537,8 @@ if platform.system() == u'Darwin':
 AFCDirectoryOpen = MobileDevice.AFCDirectoryOpen
 AFCDirectoryOpen.restype = AFCError
 AFCDirectoryOpen.argtypes = [
-    AFCConnectionRef, 
-    c_char_p, 
+    AFCConnectionRef,
+    c_char_p,
     POINTER(AFCDirectoryRef)
 ]
 
@@ -582,9 +582,9 @@ AFCFileRefOpen.argtypes = [
 AFCFileRefRead = MobileDevice.AFCFileRefRead
 AFCFileRefRead.restype = AFCError
 AFCFileRefRead.argtypes = [
-    AFCConnectionRef, 
-    AFCFileRef, 
-    c_void_p, 
+    AFCConnectionRef,
+    AFCFileRef,
+    c_void_p,
     POINTER(c_uint32)
 ]
 
@@ -630,16 +630,16 @@ AFCFileRefClose.argtypes = [AFCConnectionRef, AFCFileRef]
 AFCFileInfoOpen = MobileDevice.AFCFileInfoOpen
 AFCFileInfoOpen.restype = AFCError
 AFCFileInfoOpen.argtypes = [
-    AFCConnectionRef, 
-    c_char_p, 
+    AFCConnectionRef,
+    c_char_p,
     POINTER(AFCDictionaryRef)
 ]
 
 AFCKeyValueRead = MobileDevice.AFCKeyValueRead
 AFCKeyValueRead.restype = AFCError
 AFCKeyValueRead.argtypes = [
-    AFCDictionaryRef, 
-    POINTER(c_char_p), 
+    AFCDictionaryRef,
+    POINTER(c_char_p),
     POINTER(c_char_p)
 ]
 

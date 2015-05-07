@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +28,7 @@ from plistservice import *
 
 
 class Diagnostics(PlistService):
-    u'''Communicates with the diagnostic service and allows retrival of 
+    u'''Communicates with the diagnostic service and allows retrival of
     diagnostic information
     '''
 
@@ -47,7 +47,7 @@ class Diagnostics(PlistService):
     def __init__(self, amdevice):
         PlistService.__init__(
             self,
-            amdevice, 
+            amdevice,
             [AMSVC_MOBILE_DIAGNOSTICS_RELAY, AMSVC_IOSDIAGNOSTICS_RELAY],
             kCFPropertyListXMLFormat_v1_0
         )
@@ -184,8 +184,8 @@ def register_argparse_diag(cmdargs):
         elif isinstance(d, unicode):
             sys.stdout.write(u'"' + d + u'"\n')
         elif isinstance(d, str):
-            # dont know why but some strings name/inheritence etc come back as 
-            # CFData rather then CFString's - so we'll try to convert; if it 
+            # dont know why but some strings name/inheritence etc come back as
+            # CFData rather then CFString's - so we'll try to convert; if it
             # doesn't look like a string
             isdata = False
             nullterm = False
@@ -201,7 +201,7 @@ def register_argparse_diag(cmdargs):
             if isdata:
                 sys.stdout.write(d.encode(u'hex') + u'\n')
             else:
-                sys.stdout.write(u'"' + d + u'"\n')             
+                sys.stdout.write(u'"' + d + u'"\n')
         elif isinstance(d, (int, long, float, complex)):
             sys.stdout.write(d.__str__() + u'\n')
         else:
@@ -234,7 +234,7 @@ def register_argparse_diag(cmdargs):
         if args.cls is not None:
             cls = args.cls.decode(u'utf-8')
         ioreg_dmp(diag.ioregistry(plane, name, cls)[u'IORegistry'])
-        diag.disconnect()       
+        diag.disconnect()
 
     def cmd_sleep(args, dev):
         diag = Diagnostics(dev)
@@ -260,7 +260,7 @@ def register_argparse_diag(cmdargs):
 
     # diag command
     diagparser = cmdargs.add_parser(
-        u'diag', 
+        u'diag',
         help=u'retrieves diagnostic info; includes state changes like reboot, sleep etc'
     )
     diagcmd = diagparser.add_subparsers()
@@ -326,7 +326,7 @@ def register_argparse_diag(cmdargs):
         dest=u'quick',
         action=u'store_true',
         help=u'restarts quickly - without properly shutting down'
-    )   
+    )
     restartcmd.set_defaults(func=cmd_restart)
 
     # shutdown command
@@ -339,6 +339,6 @@ def register_argparse_diag(cmdargs):
         dest=u'quick',
         action=u'store_true',
         help=u'shutsdown quickly'
-    )   
+    )
     shutdowncmd.set_defaults(func=cmd_shutdown)
 

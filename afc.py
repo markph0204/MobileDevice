@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,7 +38,7 @@ def _stat_from_afcdict(afcdict):
     name = c_char_p()
     value = c_char_p()
     while AFCKeyValueRead(afcdict, byref(name), byref(value)) == MDERR_OK:
-        if name.value is None or value.value is None: 
+        if name.value is None or value.value is None:
             break
 
         strname = name.value.decode(u'utf-8')
@@ -56,20 +56,20 @@ def _stat_from_afcdict(afcdict):
             if v not in modes:
                 raise RuntimeError(u'Unknown file type:', v)
             setattr(
-                retval, 
+                retval,
                 strname,
                 modes[v]
             )
         elif strname == u'st_mtime' or strname == u'st_birthtime':
             setattr(
-                retval, 
-                strname, 
+                retval,
+                strname,
                 value.value.decode(u'utf-8')[:10]
             )
         else:
             setattr(
-                retval, 
-                strname, 
+                retval,
+                strname,
                 value.value.decode(u'utf-8')
             )
     return retval
@@ -83,13 +83,13 @@ class AFCFile(object):
         if mode.find(u'r') != -1:
             self.mode |= 0x1
         if mode.find(u'w') != -1:
-            self.mode |= 0x2 
+            self.mode |= 0x2
         self.f = AFCFileRef()
         self.closed = True
         if AFCFileRefOpen(
-                self.afc_con, 
-                path.encode(u'utf-8'), 
-                self.mode, 
+                self.afc_con,
+                path.encode(u'utf-8'),
+                self.mode,
                 byref(self.f)) != MDERR_OK:
             raise IOError(u'Unable to open file:', path, mode)
         self.closed = False
@@ -116,8 +116,8 @@ class AFCFile(object):
 
     def seek(self, offset, whence=os.SEEK_SET):
         if AFCFileRefSeek(
-                self.afc_con, 
-                self.f, offset, 
+                self.afc_con,
+                self.f, offset,
                 whence,
                 byref(idx), 0) != MDERR_OK:
             raise ValueError(u'Unable to set file location')
@@ -159,8 +159,8 @@ class AFCFile(object):
         while br < n or n == -1:
             buflen.value = 4096
             if AFCFileRefRead(
-                self.afc_con, 
-                self.f, 
+                self.afc_con,
+                self.f,
                 buf,
                 byref(buflen)
             ) != MDERR_OK or buflen.value == 0:
@@ -199,7 +199,7 @@ class AFC(object):
 
     def link(self, target, link_name):
         if AFCLinkPath(
-                self.afc_con, 
+                self.afc_con,
                 1, # hard
                 target.encode(u'utf-8'),
                 link_name.encode(u'utf-8')
@@ -212,8 +212,8 @@ class AFC(object):
     def lstat(self, path):
         info = AFCDictionaryRef()
         if AFCFileInfoOpen(
-                self.afc_con, 
-                path.encode(u'utf-8'), 
+                self.afc_con,
+                path.encode(u'utf-8'),
                 byref(info)
             ) != MDERR_OK:
             raise OSError(u'Unable to open path:', path)
@@ -224,7 +224,7 @@ class AFC(object):
     def listdir(self, path):
         afc_dir = AFCDirectoryRef()
         if AFCDirectoryOpen(
-                self.afc_con, 
+                self.afc_con,
                 path.encode(u'utf-8'),
                 byref(afc_dir)
             ) != MDERR_OK:
@@ -259,12 +259,12 @@ class AFC(object):
         return self.unlink(path)
 
     def removedirs(self, path):
-        raise NotImplementedError() 
+        raise NotImplementedError()
 
     def rename(self, src, dst):
         if AFCRenamePath(
-                self.afc_con, 
-                src.encode(u'utf-8'), 
+                self.afc_con,
+                src.encode(u'utf-8'),
                 dst.encode(u'utf-8')
             ) != MDERR_OK:
             raise OSError(u'Unable to rename file:', src, dst)
@@ -284,8 +284,8 @@ class AFC(object):
 
     def symlink(self, target, link_name):
         if AFCLinkPath(
-                self.afc_con, 
-                2, # soft 
+                self.afc_con,
+                2, # soft
                 target.encode(u'utf-8'),
                 link_name.encode(u'utf-8')
             ) != MDERR_OK:

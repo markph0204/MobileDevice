@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,9 +32,9 @@ import pprint
 class InstallationProxy(PlistService):
     def __init__(self, amdevice):
         PlistService.__init__(
-            self, 
-            amdevice, 
-            [AMSVC_INSTALLATION_PROXY], 
+            self,
+            amdevice,
+            [AMSVC_INSTALLATION_PROXY],
             kCFPropertyListXMLFormat_v1_0
         )
 
@@ -49,8 +49,8 @@ class InstallationProxy(PlistService):
         # I've no idea why we get it in multiple responses .. but we do
         while True:
             reply = self._recvmsg()
-            if (    reply is None 
-                or (    u'Status' in reply 
+            if (    reply is None
+                or (    u'Status' in reply
                     and reply[u'Status'] == u'Complete')):
                 break # done
             for app in reply[u'CurrentList']:
@@ -89,7 +89,7 @@ class InstallationProxy(PlistService):
         CFRelease(cfoptions)
         if err != MDERR_OK:
             raise RuntimeError(u'Unable to install application', err)
-        
+
     def uninstall_application(self, appid, options=None, progress=None):
         u'''Uninstall the application'''
         def callback(cfdict, arg):
@@ -103,7 +103,7 @@ class InstallationProxy(PlistService):
             cb = AMDeviceProgressCallback(progress)
 
         AMDeviceUninstallApplication(self.s, cfappid, options, cb, None)
-        
+
     def archive_application(self, appid, options=None):
         u'''Archive the application'''
         def callback(cfdict, arg):
@@ -194,7 +194,7 @@ def register_argparse_install(cmdargs):
         pxy.disconnect()
 
     installparser = cmdargs.add_parser(
-        u'install', 
+        u'install',
         help=u'installation proxy commands'
     )
     installcmd = installparser.add_subparsers()
