@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,8 +30,8 @@ from plistservice import *
 class NotificationProxy(PlistService):
     def __init__(self, amdevice):
         PlistService.__init__(
-            self, 
-            amdevice, 
+            self,
+            amdevice,
             [u'com.apple.mobile.notification_proxy']
         )
 
@@ -100,7 +100,7 @@ def register_argparse_notifyproxy(cmdargs):
 
     # post command
     postcmd = notifycmds.add_parser(
-        u'post', 
+        u'post',
         help=u'post a notification to the system'
     )
     postcmd.add_argument(
@@ -111,14 +111,14 @@ def register_argparse_notifyproxy(cmdargs):
 
     # shutdown command
     shutdowncmd = notifycmds.add_parser(
-        u'shutdown', 
+        u'shutdown',
         help=u'shutdown the notification system'
     )
     shutdowncmd.set_defaults(func=cmd_shutdown)
 
     # observe command
     observecmd = notifycmds.add_parser(
-        u'observe', 
+        u'observe',
         help=u'observe a notification in the system'
     )
     observecmd.add_argument(

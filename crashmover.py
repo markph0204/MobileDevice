@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,7 +30,7 @@ import time
 
 
 class CrashMover(object):
-    u'''Moves crash logs from their various scattered locations into the afc 
+    u'''Moves crash logs from their various scattered locations into the afc
     crash log directory'''
 
     def __init__(self, amdevice):
@@ -45,7 +45,7 @@ class CrashMover(object):
         u'''Moves all crash logs into the afc crash log directory
 
         Arguments:
-        extensions -- if present a list of crash file extensions to move 
+        extensions -- if present a list of crash file extensions to move
                       XXX not currently working
         '''
         # XXX should we wait just in case?
@@ -123,21 +123,21 @@ def register_argparse_crashmover(cmdargs):
 
     # cmd_crashmove command
     crashparser = cmdargs.add_parser(
-        u'crash', 
+        u'crash',
         help=u'manipulates crash logs'
     )
 
     crashcmd = crashparser.add_subparsers()
 
     crashmovecmd = crashcmd.add_parser(
-        u'move', 
+        u'move',
         help=u'moves crash logs into the afc directory'
     )
     crashmovecmd.set_defaults(func=cmd_crashmove)
 
     # get the crash logs
     crashgetcmd = crashcmd.add_parser(
-        u'get', 
+        u'get',
         help=u'retrieves crash logs from the device'
     )
     crashgetcmd.add_argument(
@@ -149,5 +149,5 @@ def register_argparse_crashmover(cmdargs):
     crashgetcmd.add_argument(
         u'dest',
         help=u'destination directory; files are appended into it'
-    )   
+    )
     crashgetcmd.set_defaults(func=cmd_crashget)

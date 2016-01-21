@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,7 +39,7 @@ class ImageMounter(object):
         u'''Mounts a disk image on the device.
 
         Arguments:
-        image -- the path to the image to load; the .signature file must be 
+        image -- the path to the image to load; the .signature file must be
                  beside the image (default None - we select the best debug
                  disk image)
         progress -- an optional callback (default None)
@@ -69,7 +69,7 @@ class ImageMounter(object):
             cb = AMDeviceProgressCallback(progress)
         # XXX so the code for mount image checks if its mounted and only bothers
         # to resend the image if it isn't; for some reason I dont understand its
-        # not doing this on my version - its always sending it; then the mount 
+        # not doing this on my version - its always sending it; then the mount
         # fails (with lots of syslog output on the device)
         # -- this may be due to the image I'm loading not being a perfect match
         #AMDSetLogLevel(0xff)
@@ -94,7 +94,7 @@ def register_argparse_mount(cmdargs):
     def cmd_mountcustom(args, dev):
         im = ImageMounter(dev)
         im.mount(args.path.decode(u'utf-8'))
-        im.disconnect()     
+        im.disconnect()
 
     mountparser = cmdargs.add_parser(
         u'mount',

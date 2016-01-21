@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,14 +29,14 @@ import time
 
 class Springboard(PlistService):
     PORTRAIT = 1
-    PORTRAIT_UPSIDE_DOWN = 2 
+    PORTRAIT_UPSIDE_DOWN = 2
     LANDSCAPE = 3 # home button to right
     LANDSCAPE_HOME_TO_LEFT = 4
 
     def __init__(self, amdevice):
         PlistService.__init__(
-            self, 
-            amdevice, 
+            self,
+            amdevice,
             [AMSVC_SPRINGBOARD_SERVICES]
         )
 
@@ -118,7 +118,7 @@ def register_argparse_springboard(cmdargs):
                 displayname = icon[u'displayName']
                 pos = u'%u:%u' % (pageid, iconid)
                 if len(pos) > colmax[0]:
-                    colmax[0] = len(pos)                
+                    colmax[0] = len(pos)
                 bundleid = u''
                 version = u''
                 modtime = u''
@@ -159,13 +159,13 @@ def register_argparse_springboard(cmdargs):
 
         for row in rows:
             retval += (
-                pad + 
+                pad +
                 row[0].ljust(colmax[0]) + u'  ' +
                 row[1].ljust(colmax[1]) + u'  ' +
-                row[4].ljust(colmax[4]) + u'  ' + 
-                row[3].rjust(colmax[3]) + u'  ' + 
+                row[4].ljust(colmax[4]) + u'  ' +
+                row[3].rjust(colmax[3]) + u'  ' +
                 row[2].ljust(colmax[2]) + u'\n'
-                
+
             )
             retval += row[5]
         return retval
@@ -173,7 +173,7 @@ def register_argparse_springboard(cmdargs):
     def cmd_getstate(args, dev):
         sb = Springboard(dev)
         state = sb.get_iconstate()
-        sb.disconnect() 
+        sb.disconnect()
         print print_icons(state)
 
     springboardparser = cmdargs.add_parser(

@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -64,7 +64,7 @@ class AMDevice(object):
         u'''Sends the activation record to the device - activating it for use
 
         Arguments:
-        activation_record -- the activation record, this will be converted to 
+        activation_record -- the activation record, this will be converted to
                              a CFType
 
         Error:
@@ -80,19 +80,19 @@ class AMDevice(object):
         u'''Connects to the device, and starts a session
 
         Arguments:
-        advanced -- if not set, this will create a pairing record if required 
+        advanced -- if not set, this will create a pairing record if required
                     (default: false)
 
         Error:
         Raises RuntimeError describing the error condition
         '''
-        if AMDeviceConnect(self.dev) != MDERR_OK: 
+        if AMDeviceConnect(self.dev) != MDERR_OK:
             raise RuntimeError(u'Unable to connect to device')
 
         if not advanced:
             self.pair()
 
-        if AMDeviceStartSession(self.dev) != MDERR_OK: 
+        if AMDeviceStartSession(self.dev) != MDERR_OK:
             if not advanced:
                 raise RuntimeError(u'Unable to start session')
 
@@ -911,42 +911,42 @@ def register_argparse_dev(cmdargs):
         am_device = AMDevice(dev)
         am_device.relay({"ports":getattr(args, u'port:pair')})
 
-
+        
     # standard dev commands
     devparser = cmdargs.add_parser(
-        u'dev', 
+        u'dev',
         help=u'commands related to the device'
     )
 
     # device info
     devcmds = devparser.add_subparsers()
     infocmd = devcmds.add_parser(
-        u'info', 
+        u'info',
         help=u'display basic info about the device'
     )
     infocmd.set_defaults(func=cmd_info)
 
     # get value
     getcmd = devcmds.add_parser(
-        u'get', 
+        u'get',
         help=u'display key/value info about the device'
     )
     getcmd.add_argument(
-        u'key', 
+        u'key',
         nargs=u'?',
         help=u'the key of the value to get'
     )
     getcmd.add_argument(
-        u'-d', 
-        metavar=u'domain', 
-        dest=u'domain', 
+        u'-d',
+        metavar=u'domain',
+        dest=u'domain',
         help=u'the domain of the key to get'
     )
     getcmd.set_defaults(func=cmd_get)
 
     # set value
     setcmd = devcmds.add_parser(
-        u'set', 
+        u'set',
         help=u'set key/value info about the device'
     )
     setcmd.add_argument(
@@ -955,12 +955,12 @@ def register_argparse_dev(cmdargs):
     )
     # XXX how do we support complex (dict) settings?
     setcmd.add_argument(
-        u'value', 
+        u'value',
         help=u'the value of the key to apply (only able to set simple values at present)'
     )
     setcmd.add_argument(
-        u'-d', 
-        metavar=u'domain', 
+        u'-d',
+        metavar=u'domain',
         dest=u'domain',
         help=u'the domain the key to set lives in'
     )
@@ -968,17 +968,17 @@ def register_argparse_dev(cmdargs):
 
     # delete value
     delcmd = devcmds.add_parser(
-        u'del', 
+        u'del',
         help=u'delete key/value info from the device - DANGEROUS'
     )
     delcmd.add_argument(
-        u'key', 
+        u'key',
         help=u'the key of the value to delete'
     )
     delcmd.add_argument(
-        u'-d', 
-        metavar=u'domain', 
-        dest=u'domain', 
+        u'-d',
+        metavar=u'domain',
+        dest=u'domain',
         help=u'the domain of the key to delete'
     )
     delcmd.set_defaults(func=cmd_del)
@@ -1003,17 +1003,17 @@ def register_argparse_dev(cmdargs):
         help=u'get/set wireless buddy parameters'
     )
     buddycmd.add_argument(
-        u'-w', 
-        help=u'enable wifi (0 or 1)', 
-        dest=u'wifi', 
+        u'-w',
+        help=u'enable wifi (0 or 1)',
+        dest=u'wifi',
         type=int,
         choices=(0, 1)
     )
     buddycmd.add_argument(
-        u'-s', 
-        help=u'sets buddy id (0 or 1)', 
+        u'-s',
+        help=u'sets buddy id (0 or 1)',
         dest=u'setid',
-        type=int,       
+        type=int,
         choices=(0, 1)
     )
     buddycmd.set_defaults(func=cmd_buddy)

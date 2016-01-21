@@ -2,17 +2,17 @@
 # coding: utf-8
 
 # Copyright (c) 2013 Mountainstorm
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -53,7 +53,7 @@ class DebugAppList(object):
             raise RuntimeError(u'Unable to launch:', u'com.apple.debugserver.applist')
 
     def get_applist(self):
-        u'''Retrieves an list of aplications on the device; with pids if their 
+        u'''Retrieves an list of aplications on the device; with pids if their
         running
 
         Returns:
@@ -88,7 +88,7 @@ class GDB(object):
         self._runcmds = u''
 
         if device_support_path is None:
-            device_support_path = dev.find_device_support_path()        
+            device_support_path = dev.find_device_support_path()
 
         self._set_file(local_path, remote_path)
         # add standard substitutions
@@ -96,7 +96,7 @@ class GDB(object):
         for f in os.listdir(root):
             if os.path.isdir(os.path.join(root, f)):
                 self._add_substitution(
-                    u'/' + f, 
+                    u'/' + f,
                     posixpath.join(root, f)
                 )
 
@@ -106,11 +106,11 @@ class GDB(object):
     def _set_debugserver_fd(self, fd):
         # now gdb's remote protocol requires us to setup a unix socket; when you
         # specify 'target remote-mobile <unix socket path>' it then opens this
-        # and reads a control message; containing the fd to use to actually 
-        # talk to the debugserver.  It then tkes this and does a standard 
+        # and reads a control message; containing the fd to use to actually
+        # talk to the debugserver.  It then tkes this and does a standard
         # 'target remote-OSX filedesc:<fd>' command.
         #
-        # As I'm lazy I'm just going to pass it the fd directly     
+        # As I'm lazy I'm just going to pass it the fd directly
         self._debugserver_fd = fd
 
     def _get_bundleid(self, local_path):
@@ -122,12 +122,12 @@ class GDB(object):
         return info[u'CFBundleIdentifier']
 
     def _set_file(self, local_path, remote_path=None):
-        import pprint 
+        import pprint
 
         if remote_path is None:
-            # we dont know where its gone; this should only apply for 
+            # we dont know where its gone; this should only apply for
             # non-jailbroken devices i.e. where you can only debug apps
-            # thus we can get the local appid, then lookup where on the device 
+            # thus we can get the local appid, then lookup where on the device
             # it is ... simples
             bundleid = self._get_bundleid(local_path)
 
@@ -144,7 +144,7 @@ class GDB(object):
                     u'Application %s, not installed on device' % bundleid
                 )
         else:
-            # we want the remote path to be the directory; for a .app thats 
+            # we want the remote path to be the directory; for a .app thats
             # not a problem - but for a native macho we need adjust
             remote_path = posixpath.split(remote_path)[0]
         self._file = (local_path, remote_path)
@@ -160,8 +160,8 @@ class GDB(object):
         self._add_substitution(local_folder, remote_folder)
 
     def _add_substitution(self, local_folder, remote_folder):
-        self._substitutions.append((local_folder, remote_folder))       
-        # we can get errors if the remote folder is in /private/var - its 
+        self._substitutions.append((local_folder, remote_folder))
+        # we can get errors if the remote folder is in /private/var - its
         # normally refered to by /var.  So add another substitution if need be.
         # there may be other cases of this but this it the only one I've seen
         if remote_folder.startswith(u'/private/var'):
@@ -182,7 +182,7 @@ set sharedlibrary check-uuids on
 set sharedlibrary load-rules \\".*\\" \\".*\\" container
 
 set shlib-path-substitutions'''
-    
+
         # add all the path substitutions
         for s in self._substitutions:
             retval += u' "%s" "%s"' % s
@@ -252,8 +252,8 @@ def register_argparse_debugserver(cmdargs):
             # we only load in non-advanced mode
             try:
                 # we're doing this as, for some reason, the checking load image
-                # does isn;t very good - so if we don;t we end up transfering 
-                # the image every time; which is slow and generates tonnes of 
+                # does isn;t very good - so if we don;t we end up transfering
+                # the image every time; which is slow and generates tonnes of
                 # log messages
                 applist = DebugAppList(dev)
                 applist.disconnect()
@@ -309,7 +309,7 @@ def register_argparse_debugserver(cmdargs):
             print(
                 row[0].rjust(colmax[0]) + u' ' +
                 row[1] + u' ' +
-                row[2].ljust(colmax[1]) + u'  ' + 
+                row[2].ljust(colmax[1]) + u'  ' +
                 row[3].ljust(colmax[2])
             )
 
@@ -320,8 +320,8 @@ def register_argparse_debugserver(cmdargs):
         if args.remote is not None:
             remote = args.remote.decode(u'utf-8')
         gdb = GDB(
-            dev, 
-            args.device_support_path.decode(u'utf-8'), 
+            dev,
+            args.device_support_path.decode(u'utf-8'),
             args.program.decode(u'utf-8'),
             remote
         )
@@ -332,7 +332,7 @@ def register_argparse_debugserver(cmdargs):
         gdb.run()
 
     debugparser = cmdargs.add_parser(
-        u'debug', 
+        u'debug',
         help=u'debugging commands; utilising debugserver in the developer .dmg'
     )
     debugparser.add_argument(
@@ -352,7 +352,7 @@ def register_argparse_debugserver(cmdargs):
 
     # gdb command
     gdbcmd = debugcmd.add_parser(
-        u'gdb', 
+        u'gdb',
         help=u'launches gdb; connected to the device'
     )
     gdbcmd.add_argument(
@@ -361,11 +361,11 @@ def register_argparse_debugserver(cmdargs):
         help=u'if specified we attempt to connect to this process rather than start a new instance'
     )
     gdbcmd.add_argument(
-        u'program', 
+        u'program',
         help=u'local path to the program to debug; the file must already be on the device'
     )
     gdbcmd.add_argument(
-        u'remote', 
+        u'remote',
         nargs=u'?',
         help=u'if the program is a plain mach-o rather than a .app you also need to specify where on the device the file resides'
     )
