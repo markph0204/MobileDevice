@@ -96,6 +96,135 @@ class AMDevice(object):
             if not advanced:
                 raise RuntimeError(u'Unable to start session')
 
+    def relay(self, args):
+
+        class Relay(object):
+            def __init__(self, dev, src, dst):
+                self.dev = dev
+                self.src = src
+                self.dst = dst
+                self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.server.bind((u'localhost', src))
+                self.server.listen(5)
+
+            def accept(self):
+                s, addr = self.server.accept()
+                print(u'connection to device on port: %u' % self.dst)
+                retval = None
+                try:
+                    retval = (s, self.dev.connect_to_port(self.dst))
+                except:
+                    print(u'dev relay: error: unable to connect to port %u on device' % self.dst)
+                return retval
+
+            def close(self):
+                self.server.close()
+
+        def close_connection(endpoints, ins, outs, errs, s):
+            # remove src and dst
+            other = endpoints[s][0]
+            rem = [
+                (ins, s), (ins, other),
+                (outs, s), (outs, other),
+                (errs, s), (errs, other)
+            ]
+            for rset, robj in rem:
+                try:
+                    rset.remove(robj)
+                except:
+                    pass
+            del endpoints[s]
+            del endpoints[other]
+            try:
+                s.shutdown(socket.SHUT_RDWR)
+            except:
+                pass
+            try:
+                other.shutdown(socket.SHUT_RDWR)
+            except:
+                pass
+            s.close()
+            other.close()
+        dev = self.dev
+        pairs = args["ports"]
+        relays = {}
+        endpoints = {}
+        import sys
+        # check arguments
+        try:
+            for pair in pairs:
+                src, dst = pair.split(u':')
+                src = int(src)
+                dst = int(dst)
+                # create and register server
+                relay = Relay(dev, src, dst)
+                relays[relay.server] = relay
+        except socket.error:
+            print(u'dev relay: error: unable to bind to local port - %u' % src)
+        except:
+            print(u'dev relay: error: invalid port pair - %s' % pair)
+            print sys.exc_info()
+
+        # do relaying
+        if len(relays.keys()) == len(pairs):
+            for relay in relays.values():
+                print(u'relaying traffic from local port %u to device port %u' % (relay.src, relay.dst))
+            ins = relays.keys()
+            outs = []
+            errs = []
+            while len(ins) > 0 or len(outs) > 0:
+                ready = select.select(ins, outs, errs)
+                for s in ready[0]: # inputs
+                    if s in relays:
+                        # accept a new connection
+                        e = relays[s].accept()
+                        if e is not None:
+                            a, b = e
+                            endpoints[a] = (b, '')
+                            endpoints[b] = (a, '')
+                            # add both a and b to recv
+                            ins.append(a)
+                            ins.append(b)
+                            errs.append(a)
+                            errs.append(b)
+
+                    elif s in endpoints:
+                        # recv data and store data against opposite socket
+                        data = s.recv(4096)
+                        if len(data) > 0:
+                            dst = endpoints[s][0]
+                            endpoints[dst] = (s, data)
+                            ins.remove(s)
+                            outs.append(dst)
+                        else:
+                            close_connection(endpoints, ins, outs, errs, s)
+
+                for s in ready[1]: # output
+                    if s in endpoints:
+                        # write data
+                        src, data = endpoints[s]
+                        bs = s.send(data)
+                        endpoints[s] = (src, data[bs:])
+                        if len(data) == bs:
+                            # sent everything - put src back in the recv list
+                            outs.remove(s)
+                            ins.append(src)
+
+                for s in ready[2]: # errors
+                    if s in endpoints:
+                        close_connection(endpoints, ins, outs, errs, s)
+
+        # cleanup
+        for endp in endpoints.keys():
+            try:
+                endp.shutdown(socket.SHUT_RDWR)
+            except:
+                pass
+            endp.close()
+
+        for relay in relays:
+            relay.close()
+
     def get_deviceid(self):
         u'''Retrieves the device identifier; labeled "Identifier" in the XCode
         organiser; a 10 byte value as a string in hex
@@ -779,134 +908,10 @@ def register_argparse_dev(cmdargs):
             print(u'  wireless buddy flags: %s' % s)
 
     def cmd_relay(args, dev):
-        class Relay(object):
-            def __init__(self, dev, src, dst):
-                self.dev = dev
-                self.src = src
-                self.dst = dst
-                self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.server.bind((u'localhost', src))
-                self.server.listen(5)
+        am_device = AMDevice(dev)
+        am_device.relay({"ports":getattr(args, u'port:pair')})
 
-            def accept(self):
-                s, addr = self.server.accept()
-                print(u'connection to device on port: %u' % self.dst)
-                retval = None
-                try:
-                    retval = (s, self.dev.connect_to_port(self.dst))
-                except:
-                    print(u'dev relay: error: unable to connect to port %u on device' % self.dst)
-                return retval
-
-            def close(self):
-                self.server.close()
-
-        def close_connection(endpoints, ins, outs, errs, s):
-            # remove src and dst
-            other = endpoints[s][0]
-            rem = [
-                (ins, s), (ins, other),
-                (outs, s), (outs, other),
-                (errs, s), (errs, other)
-            ]
-            for rset, robj in rem:
-                try:
-                    rset.remove(robj)
-                except:
-                    pass
-            del endpoints[s]
-            del endpoints[other]
-            try:
-                s.shutdown(socket.SHUT_RDWR)
-            except:
-                pass
-            try:
-                other.shutdown(socket.SHUT_RDWR)
-            except:
-                pass
-            s.close()
-            other.close()
-
-        pairs = getattr(args, u'port:pair')
-        relays = {}
-        endpoints = {}
-        import sys
-        # check arguments
-        try:
-            for pair in pairs:
-                src, dst = pair.split(u':')
-                src = int(src)
-                dst = int(dst)
-                # create and register server
-                relay = Relay(dev, src, dst)
-                relays[relay.server] = relay
-        except socket.error:
-            print(u'dev relay: error: unable to bind to local port - %u' % src)
-        except:
-            print(u'dev relay: error: invalid port pair - %s' % pair)
-            print sys.exc_info()
-
-        # do relaying
-        if len(relays.keys()) == len(pairs):
-            for relay in relays.values():
-                print(u'relaying traffic from local port %u to device port %u' % (relay.src, relay.dst))
-            ins = relays.keys()
-            outs = []
-            errs = []
-            while len(ins) > 0 or len(outs) > 0:
-                ready = select.select(ins, outs, errs)
-                for s in ready[0]: # inputs
-                    if s in relays:
-                        # accept a new connection
-                        e = relays[s].accept()
-                        if e is not None:
-                            a, b = e
-                            endpoints[a] = (b, '')
-                            endpoints[b] = (a, '')
-                            # add both a and b to recv
-                            ins.append(a)
-                            ins.append(b)
-                            errs.append(a)
-                            errs.append(b)
-
-                    elif s in endpoints:
-                        # recv data and store data against opposite socket
-                        data = s.recv(4096)
-                        if len(data) > 0:
-                            dst = endpoints[s][0]
-                            endpoints[dst] = (s, data)
-                            ins.remove(s)
-                            outs.append(dst)
-                        else:
-                            close_connection(endpoints, ins, outs, errs, s)
-
-                for s in ready[1]: # output
-                    if s in endpoints:
-                        # write data
-                        src, data = endpoints[s]
-                        bs = s.send(data)
-                        endpoints[s] = (src, data[bs:])
-                        if len(data) == bs:
-                            # sent everything - put src back in the recv list
-                            outs.remove(s)
-                            ins.append(src)
-
-                for s in ready[2]: # errors
-                    if s in endpoints:
-                        close_connection(endpoints, ins, outs, errs, s)
-
-        # cleanup
-        for endp in endpoints.keys():
-            try:
-                endp.shutdown(socket.SHUT_RDWR)
-            except:
-                pass
-            endp.close()
-
-        for relay in relays:
-            relay.close()
-
-
+        
     # standard dev commands
     devparser = cmdargs.add_parser(
         u'dev',
