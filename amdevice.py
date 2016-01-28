@@ -145,7 +145,7 @@ class AMDevice(object):
                 pass
             s.close()
             other.close()
-        dev = self.dev
+        dev = self
         pairs = args["ports"]
         relays = {}
         endpoints = {}
